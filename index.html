@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GENITUS INCOME GOAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f4f7fb;--surface:#ffffff;--panel:#ffffff;--border:#d9e2ec;--accent:#0e7490;--gold:#b45309;--green:#15803d;--red:#b91c1c;--muted:#52606d;--text:#1e293b;--bright:#0f172a;--mono:'Space Mono',monospace;--sans:'Rajdhani',sans-serif;}
+    :root.dark-theme{--bg:#080c10;--surface:#0d1117;--panel:#111820;--border:#1e2d3d;--accent:#00d4ff;--gold:#f0c040;--green:#00ff88;--red:#ff3b5c;--muted:#7d92a8;--text:#c8d8e8;--bright:#ffffff;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;min-height:100vh;transition:background .25s,color .25s;}
+    header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200;}
+    .logo{display:flex;align-items:center;gap:12px;}
+    .logo-mark{width:32px;height:32px;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:14px;color:var(--gold);}
+    .logo-text{font-family:var(--mono);font-size:13px;letter-spacing:3px;color:var(--bright);}
+    .logo-sub{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);display:block;margin-top:1px;}
+    #themeToggleBtn{background:none;border:1px solid var(--border);color:var(--accent);width:30px;height:30px;border-radius:2px;cursor:pointer;font-size:14px;}
+    .layout{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 56px);}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;}}
+    .picker-panel{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:14px;gap:10px;overflow-y:auto;max-height:calc(100vh - 56px);}
+    .field-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;display:block;}
+    select,input[type="text"],input[type="number"]{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:12px;padding:8px 10px;outline:none;border-radius:2px;}
+    .btn{font-family:var(--mono);font-size:11px;letter-spacing:1px;padding:8px 12px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;border-radius:2px;text-transform:uppercase;}
+    .btn:hover{background:var(--gold);color:var(--bg);}
+    .btn-red{border-color:var(--red);color:var(--red);}
+    .picker-list{flex:1;overflow-y:auto;border:1px solid var(--border);border-radius:2px;min-height:180px;}
+    .picker-item{padding:8px 10px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12px;}
+    .picker-item:hover{background:rgba(180,83,9,0.08);}
+    .picker-item .sym{font-family:var(--mono);color:var(--accent);font-weight:700;}
+    .picker-item .nm{color:var(--muted);font-size:11px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .picker-empty{padding:30px 10px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:11px;}
+    .wl-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--border);border-radius:2px;margin-bottom:6px;background:var(--surface);}
+    .wl-row .sym{font-family:var(--mono);color:var(--accent);font-weight:700;min-width:90px;}
+    .wl-row input{width:65px;}
+    .main-panel{padding:18px;overflow-y:auto;}
+    .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;color:var(--muted);font-family:var(--mono);font-size:12px;gap:10px;text-align:center;}
+    .welcome .big{font-size:32px;opacity:.4;}
+    .goal-input{display:flex;gap:10px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap;}
+    .panel-block{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px;margin-bottom:16px;}
+    .panel-block h3{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+    table{width:100%;border-collapse:collapse;font-size:12px;}
+    th{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+    td{padding:7px 8px;border-bottom:1px solid rgba(125,146,168,0.15);}
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+    @media(max-width:600px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+    .stat-box{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:10px;}
+    .stat-box .lbl{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;}
+    .stat-box .val{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--bright);}
+    .warn{background:rgba(240,192,64,0.1);border:1px solid var(--gold);border-radius:3px;padding:10px 12px;font-size:11px;color:var(--text);margin-bottom:16px;line-height:1.6;}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-mark">€</div><div><span class="logo-text">GENITUS</span><span class="logo-sub">INCOME GOAL</span></div></div>
+  <button id="themeToggleBtn" title="Toggle theme">🌙</button>
+</header>
+<div class="layout">
+  <div class="picker-panel">
+    <div><span class="field-label">Exchange</span><select id="exchangeSelect" onchange="onExchangeChange()"></select></div>
+    <div><span class="field-label">Search Symbol / Name</span><input type="text" id="searchInput" placeholder="e.g. SAP, Shell..." oninput="renderPicker()"></div>
+    <div class="picker-list" id="pickerList"><div class="picker-empty">Select an exchange, then click symbols to add them to your basket.</div></div>
+  </div>
+  <div class="main-panel" id="mainPanel">
+    <div class="welcome"><div class="big">€</div><div>Add 1 or more symbols on the left to build a basket, set your monthly income target, and calculate.</div></div>
+  </div>
+</div>
+<script>
+  const SUMMARY_URL = 'https://raw.githubusercontent.com/Babybounce500/genitus-ticker-cache/main/dividend-summary.csv';
+  (function(){
+    const KEY='genitusTheme:goal';
+    function applyTheme(t){ document.documentElement.classList.toggle('dark-theme', t==='dark'); localStorage.setItem(KEY,t); const btn=document.getElementById('themeToggleBtn'); if(btn) btn.textContent = t==='dark' ? '☀' : '🌙'; }
+    window.__theme = localStorage.getItem(KEY) || 'light';
+    applyTheme(window.__theme);
+    document.addEventListener('DOMContentLoaded', function(){ const btn=document.getElementById('themeToggleBtn'); if(btn) btn.addEventListener('click', function(){ window.__theme = window.__theme==='dark' ? 'light' : 'dark'; applyTheme(window.__theme); }); });
+  })();
+  function parseCSVLine(line){
+    const out=[]; let cur=''; let inQ=false;
+    for(let i=0;i<line.length;i++){ const c=line[i];
+      if(inQ){ if(c==='"'){ if(line[i+1]==='"'){cur+='"';i++;} else inQ=false; } else cur+=c; }
+      else { if(c===','){ out.push(cur); cur=''; } else if(c==='"'){ inQ=true; } else cur+=c; } }
+    out.push(cur); return out;
+  }
+  let summaryByExchange = new Map(); let cacheReady = null;
+  function loadCache(){
+    if(cacheReady) return cacheReady;
+    cacheReady = fetch(SUMMARY_URL).then(r=>r.text()).then(sText=>{
+      const sLines = sText.split('\n').filter(Boolean);
+      for(let i=1;i<sLines.length;i++){
+        const [fullSymbol,name,type,ex,count,streakYears,streakDir,yieldPct,price,lastDate,lastAmount,lastCurrency] = parseCSVLine(sLines[i]);
+        if(!fullSymbol||!ex) continue;
+        if(!summaryByExchange.has(ex)) summaryByExchange.set(ex, []);
+        summaryByExchange.get(ex).push({ fullSymbol, name:(name||'').trim(), ex, yieldPct:parseFloat(yieldPct)||0, price:price?parseFloat(price):null, lastCurrency:lastCurrency||'' });
+      }
+    }).catch(e=>console.warn('Cache load failed:', e.message));
+    return cacheReady;
+  }
+  const EXCHANGES = [
+    {g:'🇺🇸 United States',opts:['US','NYSE','NASDAQ','AMEX','PINK','OTCQB','OTCQX','BATS']},
+    {g:'🇨🇦 Canada',opts:['TO','V','NEO']}, {g:'🌎 Latin America',opts:['MX','SA','BA','SN','LIM']},
+    {g:'🇬🇧 United Kingdom',opts:['LSE','IL']},
+    {g:'🇩🇪 Germany',opts:['XETRA','F','STU','DU','BE','MU','HM','HA']},
+    {g:'🇱🇺 Luxembourg',opts:['LU']}, {g:'🇮🇪 Ireland',opts:['IR']},
+    {g:'🇫🇷 France',opts:['PA']}, {g:'🇳🇱 Netherlands',opts:['AS']}, {g:'🇧🇪 Belgium',opts:['BR']},
+    {g:'🇵🇹 Portugal',opts:['LS']}, {g:'🇨🇭 Switzerland',opts:['SW']}, {g:'🇪🇸 Spain',opts:['MC']},
+    {g:'🇦🇹 Austria',opts:['VI']}, {g:'🇬🇷 Greece',opts:['AT']},
+    {g:'🇸🇪 Scandinavia',opts:['ST','OL','CO','HE']},
+    {g:'🇵🇱 Eastern Europe',opts:['WAR','PR','BUD','RO','ZSE']},
+    {g:'🇷🇺 Russia',opts:['MCX']}, {g:'🇹🇷 Turkey',opts:['IS']}, {g:'🇮🇱 Israel',opts:['TA']},
+    {g:'🇿🇦 Africa',opts:['JSE','EGX','BC','XNAI','XZIM','XBOT','LUSE','GSE','USE','RSE','DSE','SEM','MSE','XNSA']},
+    {g:'🇭🇰 Hong Kong',opts:['HK']}, {g:'🇨🇳 China',opts:['SHG','SHE']},
+    {g:'🇰🇷 Korea',opts:['KO','KQ']}, {g:'🇮🇳 India',opts:['NSE']}, {g:'🇵🇰 Pakistan',opts:['KAR']},
+    {g:'🇱🇰 Sri Lanka',opts:['CM']}, {g:'🇸🇬 Southeast Asia',opts:['KLSE','BK','JK','VN','PSE']},
+    {g:'🇹🇼 Taiwan',opts:['TW','TWO']}, {g:'🇦🇺 Australia',opts:['AU']},
+  ];
+  function buildExchangeSelect(){
+    document.getElementById('exchangeSelect').innerHTML = '<option value="">— Select Market —</option>' +
+      EXCHANGES.map(g=>`<optgroup label="${g.g}">${g.opts.map(o=>`<option value="${o}">${o}</option>`).join('')}</optgroup>`).join('');
+  }
+  let currentList = [], basket = [];
+  async function onExchangeChange(){
+    const ex = document.getElementById('exchangeSelect').value;
+    document.getElementById('searchInput').value='';
+    if(!ex){ currentList=[]; renderPicker(); return; }
+    await loadCache();
+    currentList = (summaryByExchange.get(ex)||[]).slice().sort((a,b)=>b.yieldPct-a.yieldPct);
+    renderPicker();
+  }
+  function renderPicker(){
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
+    const list = document.getElementById('pickerList');
+    const rows = currentList.filter(r=>!q || r.fullSymbol.toLowerCase().includes(q) || r.name.toLowerCase().includes(q));
+    if(!rows.length){ list.innerHTML = '<div class="picker-empty">No matches.</div>'; return; }
+    list.innerHTML = rows.slice(0,300).map(r=>`<div class="picker-item" onclick='addToBasket(${JSON.stringify(r).replace(/'/g,"&apos;")})'><span class="sym">${r.fullSymbol}</span> — ${r.yieldPct.toFixed(2)}%<span class="nm">${r.name}</span></div>`).join('');
+  }
+  function addToBasket(r){
+    if(basket.find(w=>w.fullSymbol===r.fullSymbol)) return;
+    basket.push({...r, weight:1});
+    renderMain();
+  }
+  function removeFromBasket(sym){ basket = basket.filter(w=>w.fullSymbol!==sym); renderMain(); }
+  function updateWeight(sym,val){ const w=basket.find(x=>x.fullSymbol===sym); if(w) w.weight=parseFloat(val)||0; renderMain(); }
+
+  function fmt(n){ const v=parseFloat(n); return isNaN(v)?'—':(v<0.01?v.toFixed(6):v.toFixed(2)); }
+
+  function renderMain(){
+    const panel = document.getElementById('mainPanel');
+    if(!basket.length){
+      panel.innerHTML = '<div class="welcome"><div class="big">€</div><div>Add 1 or more symbols on the left to build a basket, set your monthly income target, and calculate.</div></div>';
+      return;
+    }
+    const monthlyTarget = panel.dataset.monthly || 2000;
+
+    panel.innerHTML = `
+      <div class="goal-input">
+        <div><span class="field-label">Monatliches Ziel-Einkommen (brutto, vor Steuer)</span><input type="number" id="monthlyGoal" value="${monthlyTarget}" min="1" oninput="renderMain()"></div>
+      </div>
+      <div class="warn"><b>Wichtig:</b> Basiert auf der AKTUELLEN Trailing-Yield jeder Position — Dividendenrenditen schwanken mit Kurs und Ausschüttungshöhe, das hier ist eine Momentaufnahme, keine Garantie für künftiges Einkommen. Brutto, vor Steuern/Quellensteuer/Depotkosten.</div>
+      <div class="panel-block">
+        <h3>Basket (Gewichtung = relative Verteilung des Ziel-Einkommens)</h3>
+        ${basket.map(w=>`
+          <div class="wl-row">
+            <span class="sym">${w.fullSymbol}</span>
+            <span style="flex:1;font-size:11px;color:var(--muted)">${w.name} — ${w.yieldPct.toFixed(2)}%</span>
+            <span class="field-label" style="margin:0">weight</span>
+            <input type="number" value="${w.weight}" min="0" step="0.1" onchange="updateWeight('${w.fullSymbol}', this.value)">
+            <button class="btn btn-red" onclick="removeFromBasket('${w.fullSymbol}')">✕</button>
+          </div>`).join('')}
+      </div>
+      <div class="panel-block">
+        <h3>Ergebnis pro Position</h3>
+        <table>
+          <thead><tr><th>Symbol</th><th>Anteil Ziel-Einkommen/Monat</th><th>Nötiges Kapital</th><th>Nötige Stückzahl (ca.)</th></tr></thead>
+          <tbody id="goalRows"></tbody>
+        </table>
+      </div>
+      <div class="stat-grid" id="goalTotals"></div>
+    `;
+
+    computeGoal();
+  }
+
+  function computeGoal(){
+    const monthly = parseFloat(document.getElementById('monthlyGoal').value)||0;
+    const totalWeight = basket.reduce((s,w)=>s+w.weight,0) || 1;
+    let totalCapital = 0, totalAnnualIncome = 0;
+    const rows = basket.map(w=>{
+      const share = w.weight/totalWeight;
+      const monthlyForThis = monthly*share;
+      const annualForThis = monthlyForThis*12;
+      const capitalNeeded = w.yieldPct>0 ? annualForThis/(w.yieldPct/100) : null;
+      const sharesNeeded = (capitalNeeded && w.price) ? capitalNeeded/w.price : null;
+      totalCapital += capitalNeeded||0;
+      totalAnnualIncome += annualForThis;
+      return { ...w, monthlyForThis, capitalNeeded, sharesNeeded };
+    });
+
+    document.getElementById('goalRows').innerHTML = rows.map(r=>`
+      <tr>
+        <td class="sym" style="font-family:var(--mono);color:var(--accent)">${r.fullSymbol}</td>
+        <td>${fmt(r.monthlyForThis)}/mo</td>
+        <td>${r.capitalNeeded!=null?fmt(r.capitalNeeded):'—'} ${r.lastCurrency}</td>
+        <td>${r.sharesNeeded!=null?Math.ceil(r.sharesNeeded).toLocaleString():'—'} Stück</td>
+      </tr>`).join('');
+
+    document.getElementById('goalTotals').innerHTML = `
+      <div class="stat-box"><div class="lbl">Ziel/Monat</div><div class="val">${fmt(monthly)}</div></div>
+      <div class="stat-box"><div class="lbl">Ziel/Jahr</div><div class="val">${fmt(monthly*12)}</div></div>
+      <div class="stat-box"><div class="lbl">Gesamt-Kapitalbedarf (gemischte Währungen!)</div><div class="val" style="color:var(--green)">${fmt(totalCapital)}</div></div>
+      <div class="stat-box"><div class="lbl">Positionen</div><div class="val">${basket.length}</div></div>
+    `;
+  }
+
+  buildExchangeSelect();
+</script>
+</body>
+</html>
